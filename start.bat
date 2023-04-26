@@ -1,5 +1,6 @@
 cd data
 python -m venv venv
+pip install -r requirments.txt
 cd ../parser
 python -m venv venv
 pip install -r requirments.txt
