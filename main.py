@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 load_dotenv()
 
-MESSAGE = 'Боже, какая же это шляпа! ЭТО ЖЕ НЕ КВИТАНЦИЯ!!!'
+MESSAGE = 'Обнаружена аномалия! Что же с ней делать?'
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 BOT = telegram.Bot(token=TELEGRAM_TOKEN)
@@ -26,7 +26,7 @@ con = pymysql.connect('localhost', 'user17',
 def is_unique(string):
 	with con:
 		cur = con.cursor()
-		cur.execute(f"SELECT {a"""а я не знаю название"""} FROM datasese")
+		cur.execute(f"SELECT {UID} FROM datasese")
 		data = cur.fetchall()
 		if data.count(string) == 0:
 			return True
@@ -54,13 +54,12 @@ def sender():
 def main(request):
 	"""на вход получает данные (pandas, numpy или журнал, хз), проверяет их и в случае некорректности отправляет смс через ТГ бота."""
 	if not is_valid(request):
-		logger.warning('Ыыы, строка говна!')
+		logger.warning('Обнаружена аномальная строка, сообщаем оператору.')
 		BOT.send_message(TELEGRAM_CHAT_ID, MESSAGE)
 	else:
 		with con:
 			cur = con.cursor()
-			cur.execute(f"INSERT INTO datasese VALUES {request}")  # Надо создать файлик бд-шки и закидывать туда значения. хз зачем хвхвх)))
-		BOT.send_message(TELEGRAM_CHAT_ID, "Опа, нихуя! КВИТАНЦИЯ!!!")
+			cur.execute(f"INSERT INTO datasese VALUES {request}")
 
 
 if __name__ == "__main__":
